@@ -47,7 +47,7 @@ class InformationPage extends StatelessWidget {
                     SizedBox(height: 10),
                     
                     Text(
-                      'Aplikasi Hadis 40 Imam Nawawi ini dibangunkan untuk memudahkan umat Islam mempelajari dan menghafal koleksi hadis yang mulia ini. Dengan antara muka yang mudah dan kandungan yang lengkap, semoga aplikasi ini dapat membantu dalam perjalanan menuntut ilmu agama.\n\n'
+                      'Aplikasi Hadis 40 ini dibangunkan untuk memudahkan umat Islam mempelajari dan menghafal koleksi hadis yang mulia ini. Dengan antara muka yang mudah dan kandungan yang lengkap, semoga aplikasi ini dapat membantu dalam perjalanan menuntut ilmu agama.\n\n'
                       'Ciri-ciri aplikasi:\n'
                       '▪ 42 hadis pilihan Imam Nawawi lengkap\n'
                       '▪ Teks hadis dengan terjemahan dan penjelasan\n'

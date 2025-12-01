@@ -1,9 +1,9 @@
-# Hadis 40 Imam Nawawi - Implementation Notes
+# Hadis 40 - Implementation Notes
 
 ## ✅ Completed
 
-1. **Package Name Changed**: Changed from `com.af1productions.celiktafsirv3` to `com.af1productions.hadis40`
-2. **App Name Updated**: Changed to "Hadis 40 Imam Nawawi" throughout the app
+1. **Package Name Changed**: Changed from `com.af1productions.celiktafsirv3` to `com.af1productions.hadis40`, then to `com.af1productions.hadis40v2`
+2. **App Name Updated**: Changed to "Hadis 40" throughout the app
 3. **Main Page Created**: Home page with logo, hadith selector (slider +/-), tick button, quote placeholder, settings and favorites buttons
 4. **Hadith Reading Page**: Complete reading page with:
    - Hamburger menu (sidebar)
