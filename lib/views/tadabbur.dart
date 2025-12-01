@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_constants.dart';
 import '../models/tadabbur.dart' as model;
 
 class TadabburPage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _TadabburPageState extends State<TadabburPage> {
       appBar: AppBar(
         title: Text('Pilihan Surah', style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();

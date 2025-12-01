@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_constants.dart';
 
 class SurahCalculatorPage extends StatefulWidget {
   @override
@@ -70,7 +71,7 @@ class _SurahCalculatorPageState extends State<SurahCalculatorPage> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -143,7 +144,7 @@ class _SurahCalculatorPageState extends State<SurahCalculatorPage> {
                       ),
                       value: surah['checked'],
                       onChanged: (value) => _toggleSurah(index),
-                      activeColor: const Color.fromARGB(255, 52, 21, 104),
+                      activeColor: AppConstants.appBarColor,
                     );
                   },
                 ),
@@ -163,7 +164,7 @@ class _SurahCalculatorPageState extends State<SurahCalculatorPage> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: const Color.fromARGB(255, 52, 21, 104),
+            color: AppConstants.appBarColor,
           ),
         ),
         Text(

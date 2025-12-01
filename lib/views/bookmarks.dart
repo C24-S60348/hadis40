@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/hadith_service.dart';
 import '../services/hadith_data_loader.dart';
 import '../models/hadith.dart' as hadithModel;
+import '../utils/app_constants.dart';
 
 class BookmarksPage extends StatefulWidget {
   @override
@@ -43,7 +44,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
         SnackBar(
           content: Text('Bookmark removed'),
           duration: Duration(seconds: 2),
-          backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+          backgroundColor: AppConstants.appBarColor,
         ),
       );
     } catch (e) {
@@ -63,7 +64,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
       appBar: AppBar(
         title: Text('Hadis Kesukaan Saya', style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -85,7 +86,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                 ? Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        const Color.fromARGB(255, 52, 21, 104),
+                        AppConstants.appBarColor,
                       ),
                     ),
                   )
@@ -169,7 +170,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                              color: const Color.fromARGB(255, 52, 21, 104),
+                                              color: AppConstants.appBarColor,
                                             ),
                                           ),
                                           SizedBox(height: 4),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:csv/csv.dart';
+import '../utils/app_constants.dart';
 
 class SenaraiSurauJumaatPage extends StatefulWidget {
   @override
@@ -65,7 +66,7 @@ class _SenaraiSurauJumaatPageState extends State<SenaraiSurauJumaatPage> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -122,7 +123,7 @@ class _SenaraiSurauJumaatPageState extends State<SenaraiSurauJumaatPage> {
                                 child: ListTile(
                                   leading: Icon(
                                     Icons.mosque,
-                                    color: const Color.fromARGB(255, 52, 21, 104),
+                                    color: AppConstants.appBarColor,
                                   ),
                                   title: Text(
                                     surau.isNotEmpty ? surau[0].toString() : 'N/A',

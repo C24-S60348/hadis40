@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
+import 'navigation_service.dart';
 
 class SidebarMenu extends StatelessWidget {
   @override
@@ -36,8 +36,17 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.home,
                       title: 'Home',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushReplacementNamed('/home');
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToHome(context);
+                      },
+                    ),
+                    _buildMenuItem(
+                      context,
+                      icon: Icons.book,
+                      title: 'Tentang Hadis 40',
+                      onTap: () {
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToAboutHadis40(context);
                       },
                     ),
                     _buildMenuItem(
@@ -45,8 +54,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.mosque,
                       title: 'Panduan Solat Sunat',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed('/panduan-solat-sunat');
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToPanduanSolatSunat(context);
                       },
                     ),
                     _buildMenuItem(
@@ -54,8 +63,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.format_quote,
                       title: 'Kata-kata Hikmah',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed('/kata-kata-hikmah');
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToKataKataHikmah(context);
                       },
                     ),
                     _buildMenuItem(
@@ -63,8 +72,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.calculate,
                       title: 'Surah Calculator',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed('/surah-calculator');
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToSurahCalculator(context);
                       },
                     ),
                     _buildMenuItem(
@@ -72,8 +81,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.location_city,
                       title: 'Senarai Surau Jumaat',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed('/senarai-surau-jumaat');
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToSenaraiSurauJumaat(context);
                       },
                     ),
                     _buildMenuItem(
@@ -81,8 +90,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.settings,
                       title: 'Settings',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed('/settings');
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToSettings(context);
                       },
                     ),
                     _buildMenuItem(
@@ -90,8 +99,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.favorite,
                       title: 'Favourite',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed('/bookmarks');
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToBookmarks(context);
                       },
                     ),
                     _buildMenuItem(
@@ -99,8 +108,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.share,
                       title: 'Share',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        _shareApp(context);
+                        NavigationService.closeDrawer(context);
+                        NavigationService.showShareDialog(context);
                       },
                     ),
                     _buildMenuItem(
@@ -108,8 +117,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.help,
                       title: 'Help (Update Log)',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed('/info');
+                        NavigationService.closeDrawer(context);
+                        NavigationService.goToInfo(context);
                       },
                     ),
                     Divider(color: Colors.black54),
@@ -118,8 +127,8 @@ class SidebarMenu extends StatelessWidget {
                       icon: Icons.exit_to_app,
                       title: 'Exit app',
                       onTap: () {
-                        Navigator.of(context).pop();
-                        _exitApp(context);
+                        NavigationService.closeDrawer(context);
+                        NavigationService.showExitDialog(context);
                       },
                     ),
                   ],
@@ -149,41 +158,6 @@ class SidebarMenu extends StatelessWidget {
         ),
       ),
       onTap: onTap,
-    );
-  }
-
-  void _shareApp(BuildContext context) {
-    // Implement share functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Share functionality - to be implemented'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _exitApp(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Keluar Aplikasi'),
-          content: Text('Adakah anda pasti ingin keluar?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Batal'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                exit(0);
-              },
-              child: Text('Keluar'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

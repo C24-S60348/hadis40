@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/hadith_service.dart';
+import '../services/navigation_service.dart';
+import '../services/sidebar_menu.dart';
+import '../utils/app_constants.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedHadithNumber = 1;
   String _randomQuote = '';
   bool _isLoadingQuote = true;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -42,16 +46,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToHadith() {
-    Navigator.of(context).pushNamed(
-      '/hadith-reading',
-      arguments: {'hadithNumber': _selectedHadithNumber},
-    );
+    NavigationService.goToHadithReading(context, _selectedHadithNumber);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.black,
+      drawer: SidebarMenu(),
+      appBar: AppBar(
+        backgroundColor: AppConstants.appBarColor,
+        leading: IconButton(
+          icon: Icon(Icons.menu, color: Colors.white),
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+        ),
+        // title: Text(
+        //   'Hadis 40',
+        //   style: TextStyle(color: Colors.white),
+        // ),
+        centerTitle: true,
+      ),
       body: Container(
         decoration: BoxDecoration(
           // color: Colors.black,
@@ -211,9 +226,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         // Settings button
                         ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed('/settings');
-                          },
+                          onPressed: () => NavigationService.goToSettings(context),
                           icon: Icon(Icons.settings, color: Colors.white),
                           label: Text(
                             'Tetapan',
@@ -233,9 +246,7 @@ class _HomePageState extends State<HomePage> {
 
                         // Favorites button
                         ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed('/bookmarks');
-                          },
+                          onPressed: () => NavigationService.goToBookmarks(context),
                           icon: Icon(Icons.favorite, color: Colors.white),
                           label: Text(
                             'Favorit Saya',

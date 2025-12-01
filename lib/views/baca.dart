@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/baca.dart' as model;
 import '../services/getlistsurah.dart' as getlist;
 import '../services/download_service.dart';
+import '../utils/app_constants.dart';
 
 class BacaPage extends StatefulWidget {
   @override
@@ -74,7 +75,7 @@ class _BacaPageState extends State<BacaPage> {
           SnackBar(
             content: Text('Memuat kandungan...'),
             duration: Duration(seconds: 2),
-            backgroundColor: Color.fromARGB(255, 52, 21, 104),
+            backgroundColor: AppConstants.appBarColor,
           ),
         );
         
@@ -147,7 +148,7 @@ class _BacaPageState extends State<BacaPage> {
       SnackBar(
         content: Text(message),
         duration: Duration(seconds: 2),
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
       ),
     );
   }
@@ -161,7 +162,7 @@ class _BacaPageState extends State<BacaPage> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();

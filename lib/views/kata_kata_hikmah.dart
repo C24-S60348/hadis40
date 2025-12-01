@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/app_constants.dart';
 
 class KataKataHikmahPage extends StatefulWidget {
   @override
@@ -54,7 +55,7 @@ class _KataKataHikmahPageState extends State<KataKataHikmahPage> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -110,7 +111,7 @@ class _KataKataHikmahPageState extends State<KataKataHikmahPage> {
                               icon: Icon(Icons.arrow_back),
                               label: Text('Sebelum'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+                                backgroundColor: AppConstants.appBarColor,
                                 foregroundColor: Colors.white,
                               ),
                             ),
@@ -129,7 +130,7 @@ class _KataKataHikmahPageState extends State<KataKataHikmahPage> {
                               icon: Icon(Icons.arrow_forward),
                               label: Text('Seterusnya'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+                                backgroundColor: AppConstants.appBarColor,
                                 foregroundColor: Colors.white,
                               ),
                             ),

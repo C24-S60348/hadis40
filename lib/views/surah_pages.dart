@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/getlistsurah.dart' as getlist;
+import '../utils/app_constants.dart';
 
 class SurahPagesPage extends StatefulWidget {
   @override
@@ -123,7 +124,7 @@ class _SurahPagesPageState extends State<SurahPagesPage> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -176,7 +177,7 @@ class _SurahPagesPageState extends State<SurahPagesPage> {
                       ? Center(
                           child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Color.fromARGB(255, 52, 21, 104),
+                              AppConstants.appBarColor,
                             ),
                           ),
                         )
@@ -193,7 +194,7 @@ class _SurahPagesPageState extends State<SurahPagesPage> {
                               elevation: 2,
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: Color.fromARGB(255, 52, 21, 104),
+                                  backgroundColor: AppConstants.appBarColor,
                                   child: Text(
                                     '${page['index'] + 1}',
                                     style: TextStyle(

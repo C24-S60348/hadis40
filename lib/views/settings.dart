@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/app_constants.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -185,7 +186,7 @@ class _SettingsPageState extends State<SettingsPage> {
       return Scaffold(
         appBar: AppBar(
           title: Text('Pengaturan'),
-          backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+          backgroundColor: AppConstants.appBarColor,
         ),
         body: Center(child: CircularProgressIndicator()),
       );
@@ -198,7 +199,7 @@ class _SettingsPageState extends State<SettingsPage> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: Icon(Icons.arrow_back, color: Colors.white),

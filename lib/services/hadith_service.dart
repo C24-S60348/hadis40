@@ -74,6 +74,12 @@ class HadithService {
     int currentIndex = prefs.getInt(_currentQuoteIndexKey) ?? 0;
     String quote = quotes[currentIndex % quotes.length];
     
+    // Replace HTML <br> tags with newlines for proper display
+    quote = quote
+        .replaceAll('<br>', '\n')
+        .replaceAll('<br/>', '\n')
+        .replaceAll('<br />', '\n');
+    
     // Increment for next time
     await prefs.setInt(_currentQuoteIndexKey, (currentIndex + 1) % quotes.length);
     

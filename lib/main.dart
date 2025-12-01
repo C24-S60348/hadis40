@@ -9,6 +9,7 @@ import 'views/kata_kata_hikmah.dart';
 import 'views/surah_calculator.dart';
 import 'views/senarai_surau_jumaat.dart';
 import 'views/information.dart';
+import 'views/about_hadis40.dart';
 import 'utils/uihelper.dart';
 
 void main() {
@@ -56,6 +57,9 @@ class MyApp extends StatelessWidget {
             break;
           case '/info':
             page = InformationPage();
+            break;
+          case '/about-hadis40':
+            page = AboutHadis40Page();
             break;
           default:
             page = SplashScreen();

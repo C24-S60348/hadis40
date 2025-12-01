@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/hadith.dart' as hadithModel;
 import '../services/hadith_service.dart';
 import '../services/hadith_data_loader.dart';
-import 'sidebar_menu.dart';
+import '../services/sidebar_menu.dart';
+import '../utils/app_constants.dart';
 
 class HadithReadingPage extends StatefulWidget {
   @override
@@ -182,7 +183,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
       key: _scaffoldKey,
       drawer: SidebarMenu(),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 52, 21, 104),
+        backgroundColor: AppConstants.appBarColor,
         leading: IconButton(
           icon: Icon(Icons.menu, color: Colors.white),
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
