@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         height: double.infinity,
         child: Image.asset(
-          'assets/images/Halaman Utama.png',
+          'assets/images/SplashScreenHadis40.png',
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Container(

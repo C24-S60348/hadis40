@@ -61,7 +61,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Favourites Hadith', style: TextStyle(color: Colors.white)),
+        title: Text('Hadis Kesukaan Saya', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 52, 21, 104),
         leading: IconButton(

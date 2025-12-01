@@ -204,35 +204,60 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
           ),
         ],
       ),
-      body: PageView.builder(
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        itemCount: _allHadiths!.length,
-        itemBuilder: (context, index) {
-          final hadith = _allHadiths![index];
-          return _buildHadithContent(hadith);
-        },
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            itemCount: _allHadiths!.length,
+            itemBuilder: (context, index) {
+              final hadith = _allHadiths![index];
+              return _buildHadithContent(hadith);
+            },
+          ),
+          Positioned(
+            right: 16,
+            bottom: 16,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  mini: true,
+                  heroTag: "font_increment",
+                  onPressed: _incrementFontSize,
+                  child: Icon(Icons.add),
+                  backgroundColor: Colors.green,
+                ),
+                SizedBox(height: 10),
+                FloatingActionButton(
+                  mini: true,
+                  heroTag: "font_decrement",
+                  onPressed: _decrementFontSize,
+                  child: Icon(Icons.remove),
+                  backgroundColor: Colors.green,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: null,
     );
   }
 
   Widget _buildHadithContent(hadithModel.Hadith hadith) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.black,
-            image: DecorationImage(
-              image: AssetImage('assets/images/bg.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        image: DecorationImage(
+          image: AssetImage('assets/images/bg.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
                 // Title
                 Text(
                   "- Hadis ${hadith.number} -",
@@ -345,37 +370,11 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
                   ),
                 ),
                 
-                SizedBox(height: 20),
+                SizedBox(height: 80), // Extra space for floating buttons
               ],
             ),
           ),
-        ),
-        Positioned(
-          right: 16,
-          bottom: 16,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              FloatingActionButton(
-                mini: true,
-                heroTag: "font_increment_${hadith.number}",
-                onPressed: _incrementFontSize,
-                child: Icon(Icons.add),
-                backgroundColor: Colors.green,
-              ),
-              SizedBox(height: 10),
-              FloatingActionButton(
-                mini: true,
-                heroTag: "font_decrement_${hadith.number}",
-                onPressed: _decrementFontSize,
-                child: Icon(Icons.remove),
-                backgroundColor: Colors.green,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+        );
   }
 }
 

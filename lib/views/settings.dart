@@ -19,11 +19,11 @@ class _SettingsPageState extends State<SettingsPage> {
   ];
 
   final List<Map<String, dynamic>> _backgroundColorOptions = [
-    {'name': 'Default', 'color': Colors.black},
-    {'name': 'White', 'color': Colors.white},
-    {'name': 'Beige', 'color': Color(0xFFF5F5DC)},
-    {'name': 'Light Blue', 'color': Color(0xFFE3F2FD)},
-    {'name': 'Light Green', 'color': Color(0xFFE8F5E9)},
+    {'name': 'Putih', 'color': Colors.white},
+    {'name': 'Hitam', 'color': Colors.black},
+    {'name': 'Kuning Perak', 'color': Color(0xFFF5F5DC)},
+    {'name': 'Biru Muda', 'color': Color(0xFFE3F2FD)},
+    {'name': 'Hijau Muda', 'color': Color(0xFFE8F5E9)},
   ];
 
   @override
@@ -83,7 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Pilih Warna Latar Belakang'),
+          title: Text('Pilih warna latar belakang'),
           content: SingleChildScrollView(
             child: Column(
               children: _backgroundColorOptions.map((option) {
@@ -219,45 +219,45 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // Language Selection
-                Container(
-                  padding: EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Pilih Bahasa',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      InkWell(
-                        onTap: _showLanguageDialog,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(_selectedLanguage),
-                              Icon(Icons.arrow_drop_down),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
+                // Container(
+                //   padding: EdgeInsets.all(16.0),
+                //   decoration: BoxDecoration(
+                //     color: Colors.white.withOpacity(0.9),
+                //     borderRadius: BorderRadius.circular(10),
+                //   ),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         'Pilih Bahasa',
+                //         style: TextStyle(
+                //           fontSize: 18,
+                //           fontWeight: FontWeight.bold,
+                //           color: Colors.black,
+                //         ),
+                //       ),
+                //       SizedBox(height: 10),
+                //       InkWell(
+                //         onTap: _showLanguageDialog,
+                //         child: Container(
+                //           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                //           decoration: BoxDecoration(
+                //             border: Border.all(color: Colors.grey),
+                //             borderRadius: BorderRadius.circular(8),
+                //           ),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //             children: [
+                //               Text(_selectedLanguage),
+                //               Icon(Icons.arrow_drop_down),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(height: 16),
 
                 // Background Color Selection
                 Container(
@@ -270,7 +270,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Pilih Warna Latar Belakang',
+                        'Pilih warna latar belakang',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

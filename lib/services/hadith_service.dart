@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HadithService {
@@ -48,18 +49,20 @@ class HadithService {
     await prefs.setString(_favoritesKey, json.encode(favorites));
   }
 
-  // Get random quote (placeholder - you'll provide quotes later)
+  // Get random quote from katakatahikmah.json
   static Future<String> getRandomQuote() async {
     final prefs = await SharedPreferences.getInstance();
-    final quotesJson = prefs.getString(_quoteKey);
     
     List<String> quotes = [];
-    if (quotesJson != null) {
-      try {
-        quotes = List<String>.from(json.decode(quotesJson));
-      } catch (e) {
-        quotes = [];
-      }
+    
+    try {
+      // Load quotes from JSON file
+      final String jsonString = await rootBundle.loadString('assets/data/katakatahikmah.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      quotes = List<String>.from(jsonData['kata-kata-hikmah'] ?? []);
+    } catch (e) {
+      // Fallback to default quote if file loading fails
+      quotes = ['Kata-kata hikmah akan muncul di sini'];
     }
     
     // Default quote if none provided

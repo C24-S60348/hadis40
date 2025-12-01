@@ -42,9 +42,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToHadith() {
-    Navigator.of(context).pushNamed('/hadith-reading', arguments: {
-      'hadithNumber': _selectedHadithNumber,
-    });
+    Navigator.of(context).pushNamed(
+      '/hadith-reading',
+      arguments: {'hadithNumber': _selectedHadithNumber},
+    );
   }
 
   @override
@@ -53,188 +54,210 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.black,
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.black,
-          // image: DecorationImage(
-          //   image: AssetImage('assets/images/bg.jpg'),
-          //   fit: BoxFit.cover,
-          // ),
+          // color: Colors.black,
+          image: DecorationImage(
+            image: AssetImage('assets/images/bg.jpg'),
+            fit: BoxFit.cover,
+          ),
         ),
         child: SafeArea(
           child: Column(
             children: [
               // Logo
               Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(10.0),
                 child: Image.asset(
                   'assets/images/logo.png',
-                  height: 120,
+                  height: 240,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
                     return Icon(Icons.mosque, size: 120, color: Colors.white);
                   },
                 ),
               ),
-              
-              SizedBox(height: 20),
-              
-              // "Pilih nombor Hadis" text
-              Text(
-                'Pilih nombor Hadis',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              
-              SizedBox(height: 30),
-              
-              // Hadith number display
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(
-                  '$_selectedHadithNumber',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              
-              SizedBox(height: 30),
-              
-              // Slider and +/- buttons
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Row(
-                  children: [
-                    // Minus button
-                    IconButton(
-                      onPressed: _decrementHadith,
-                      icon: Icon(Icons.remove_circle, size: 40, color: Colors.white),
-                    ),
-                    
-                    // Slider
-                    Expanded(
-                      child: Slider(
-                        value: _selectedHadithNumber.toDouble(),
-                        min: 1,
-                        max: 42,
-                        divisions: 41,
-                        label: '$_selectedHadithNumber',
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedHadithNumber = value.round();
-                          });
-                        },
-                        activeColor: Colors.green,
-                      ),
-                    ),
-                    
-                    // Plus button
-                    IconButton(
-                      onPressed: _incrementHadith,
-                      icon: Icon(Icons.add_circle, size: 40, color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-              
-              SizedBox(height: 30),
-              
-              // Tick/Green button
-              ElevatedButton(
-                onPressed: _navigateToHadith,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: Icon(
-                  Icons.check,
-                  color: Colors.white,
-                  size: 40,
-                ),
-              ),
-              
-              SizedBox(height: 30),
-              
-              // Random Quote placeholder
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 30),
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: _isLoadingQuote
-                    ? CircularProgressIndicator()
-                    : Text(
-                        _randomQuote,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.black87,
-                        ),
-                      ),
-              ),
-              
+
               Spacer(),
-              
-              // Settings and Favorites buttons
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Settings button
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/settings');
-                      },
-                      icon: Icon(Icons.settings, color: Colors.white),
-                      label: Text(
-                        'Tetapan',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
+
+              Column(
+                children: [
+                  Text(
+                    'Pilih nombor Hadis',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Hadith number display
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(
+                        255,
+                        136,
+                        202,
+                        138,
+                      ).withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      '$_selectedHadithNumber',
+                      style: TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
-                    
-                    // Favorites button
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/bookmarks');
-                      },
-                      icon: Icon(Icons.favorite, color: Colors.white),
-                      label: Text(
-                        'Favorit Saya',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Slider and +/- buttons
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        // Minus button
+                        IconButton(
+                          onPressed: _decrementHadith,
+                          icon: Icon(
+                            Icons.remove_circle,
+                            size: 40,
+                            color: Colors.black,
+                          ),
                         ),
+
+                        // Slider
+                        Expanded(
+                          child: Slider(
+                            value: _selectedHadithNumber.toDouble(),
+                            min: 1,
+                            max: 42,
+                            divisions: 41,
+                            label: '$_selectedHadithNumber',
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedHadithNumber = value.round();
+                              });
+                            },
+                            activeColor: Colors.green,
+                          ),
+                        ),
+
+                        // Plus button
+                        IconButton(
+                          onPressed: _incrementHadith,
+                          icon: Icon(
+                            Icons.add_circle,
+                            size: 40,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Tick/Green button
+                  ElevatedButton(
+                    onPressed: _navigateToHadith,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 15,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                  ],
-                ),
+                    child: Icon(Icons.check, color: Colors.black, size: 40),
+                  ),
+
+                  SizedBox(height: 10),
+
+                  // Random Quote placeholder
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 30),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: _isLoadingQuote
+                        ? CircularProgressIndicator()
+                        : Text(
+                            _randomQuote,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.black87,
+                            ),
+                          ),
+                  ),
+
+                  // Spacer(),
+
+                  // Settings and Favorites buttons
+                  Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // Settings button
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/settings');
+                          },
+                          icon: Icon(Icons.settings, color: Colors.white),
+                          label: Text(
+                            'Tetapan',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 15,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          ),
+                        ),
+
+                        // Favorites button
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/bookmarks');
+                          },
+                          icon: Icon(Icons.favorite, color: Colors.white),
+                          label: Text(
+                            'Favorit Saya',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 15,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+              Spacer(),
             ],
           ),
         ),
@@ -242,4 +265,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
