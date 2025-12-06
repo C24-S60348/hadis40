@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.af1productions.hadis40v2"
+    namespace = "com.af1productions.hadis40"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.af1productions.hadis40v2"
+        applicationId = "com.af1productions.hadis40"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -32,10 +32,10 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("/Users/afwanhaziq/documents/keystore.jks")
-            storePassword = "123456"
-            keyAlias = "af1"
-            keyPassword = "123456"
+            storeFile = file("/Users/afwanhaziq/documents/hadis40.keystore")
+            storePassword = "android"
+            keyAlias = "androidkey"
+            keyPassword = "android"
         }
     }
 
