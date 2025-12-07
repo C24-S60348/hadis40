@@ -180,7 +180,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
             SnackBar(
               content: Text('Audio disambung semula'),
               duration: Duration(seconds: 2),
-              backgroundColor: Colors.green[700],
+              backgroundColor: const Color.fromARGB(255, 64, 163, 69),
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -216,7 +216,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
         SnackBar(
           content: Text('Audio sedang dimuat turun, akan dimainkan sebentar lagi...'),
           duration: Duration(seconds: 3),
-          backgroundColor: Colors.green[700],
+          backgroundColor: const Color.fromARGB(255, 64, 163, 69),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -388,7 +388,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
               heroTag: "font_toggle",
               onPressed: _toggleFontSize,
               child: Icon(_isIncreasing ? Icons.add : Icons.remove),
-              backgroundColor: Colors.green,
+              backgroundColor: const Color.fromARGB(255, 111, 191, 113),
             ),
           ),
         ],
@@ -513,7 +513,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
                               child: ElevatedButton(
                                 onPressed: _playAudio,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.green[700],
+                                  backgroundColor: const Color.fromARGB(255, 64, 163, 69),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
