@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
 import '../utils/app_constants.dart';
 
 class SurahCalculatorPage extends StatefulWidget {
@@ -7,23 +9,53 @@ class SurahCalculatorPage extends StatefulWidget {
 }
 
 class _SurahCalculatorPageState extends State<SurahCalculatorPage> {
-  // Sample surah data - replace with actual surah list
-  final List<Map<String, dynamic>> _surahList = [
-    {'name': 'Al-Fatihah', 'juz': 1, 'ayat': 7, 'pages': 1, 'checked': false},
-    {'name': 'Al-Baqarah', 'juz': 1, 'ayat': 286, 'pages': 48, 'checked': false},
-    {'name': 'Ali Imran', 'juz': 3, 'ayat': 200, 'pages': 60, 'checked': false},
-    // Add all 114 surahs here with their juz, ayat, and pages
-  ];
+  List<Map<String, dynamic>> _surahList = [];
+  bool _isLoading = true;
 
   int _totalJuz = 0;
   int _totalAyat = 0;
   int _totalSurah = 0;
-  int _totalPages = 0;
+  double _totalPages = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _calculateTotals();
+    _loadSurahData();
+  }
+
+  Future<void> _loadSurahData() async {
+    try {
+      final String jsonString = await rootBundle.loadString('assets/data/surahcalculator.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      final List<dynamic> surahsData = jsonData['surahs'] ?? [];
+      
+      setState(() {
+        _surahList = surahsData.map((surah) {
+          // Convert juz to proper format (handle both int and List)
+          dynamic juz = surah['juz'];
+          if (juz is List) {
+            juz = juz.map((j) => _toInt(j)).toList();
+          } else {
+            juz = _toInt(juz);
+          }
+          
+          return {
+            'name': surah['name']?.toString() ?? '',
+            'juz': juz,
+            'ayat': _toInt(surah['ayat']),
+            'pages': _toDouble(surah['pages']),
+            'checked': false,
+          };
+        }).toList();
+        _isLoading = false;
+        _calculateTotals();
+      });
+    } catch (e) {
+      print('Error loading surah data: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   void _toggleSurah(int index) {
@@ -33,33 +65,99 @@ class _SurahCalculatorPageState extends State<SurahCalculatorPage> {
     });
   }
 
+  // Helper function to safely convert number to int (handles both int and double)
+  int _toInt(dynamic value) {
+    if (value is int) {
+      return value;
+    } else if (value is double) {
+      return value.round();
+    } else if (value is String) {
+      return int.tryParse(value) ?? 0;
+    }
+    return 0;
+  }
+
+  // Helper function to safely convert number to double (keep full precision from JSON)
+  double _toDouble(dynamic value) {
+    if (value is double) {
+      return value; // Keep original precision
+    } else if (value is int) {
+      return value.toDouble();
+    } else if (value is String) {
+      return double.tryParse(value) ?? 0.0;
+    }
+    return 0.0;
+  }
+
   void _calculateTotals() {
     _totalJuz = 0;
     _totalAyat = 0;
     _totalSurah = 0;
-    _totalPages = 0;
+    _totalPages = 0.0;
 
     Set<int> uniqueJuz = {};
 
     for (var surah in _surahList) {
       if (surah['checked'] == true) {
         _totalSurah++;
-        _totalAyat += surah['ayat'] as int;
-        _totalPages += surah['pages'] as int;
-        uniqueJuz.add(surah['juz'] as int);
+        _totalAyat += _toInt(surah['ayat']);
+        _totalPages += _toDouble(surah['pages']);
+        
+        // Handle juz - can be int or List<int>
+        if (surah['juz'] is int) {
+          uniqueJuz.add(_toInt(surah['juz']));
+        } else if (surah['juz'] is List) {
+          for (var juz in surah['juz'] as List) {
+            uniqueJuz.add(_toInt(juz));
+          }
+        }
       }
     }
 
     _totalJuz = uniqueJuz.length;
+    
+    // Keep full precision for calculation, round to 1 decimal only for display
+    // Don't round here, let display handle it
   }
 
-  void _clearAll() {
+  bool get _allSelected {
+    if (_surahList.isEmpty) return false;
+    return _surahList.every((surah) => surah['checked'] == true);
+  }
+
+  void _toggleSelectAll() {
     setState(() {
+      final shouldSelectAll = !_allSelected;
       for (var surah in _surahList) {
-        surah['checked'] = false;
+        surah['checked'] = shouldSelectAll;
       }
       _calculateTotals();
     });
+  }
+
+  String _getJuzDisplay(dynamic juz) {
+    if (juz is int) {
+      return juz.toString();
+    } else if (juz is List) {
+      return juz.join(', ');
+    }
+    return '';
+  }
+
+  String _formatNumber(dynamic value) {
+    if (value is double) {
+      // Round to 1 decimal place for display
+      return value.toStringAsFixed(1);
+    } else if (value is int) {
+      return value.toString();
+    }
+    return value.toString();
+  }
+
+  // Format total pages for display (rounds 0.99 to 1.0)
+  String _formatTotalPages(double value) {
+    // Round to 1 decimal place
+    return value.toStringAsFixed(1);
   }
 
   @override
@@ -78,9 +176,12 @@ class _SurahCalculatorPageState extends State<SurahCalculatorPage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.clear_all, color: Colors.white),
-            onPressed: _clearAll,
-            tooltip: 'Clear All',
+            icon: Icon(
+              _allSelected ? Icons.clear_all : Icons.select_all,
+              color: Colors.white,
+            ),
+            onPressed: _toggleSelectAll,
+            tooltip: _allSelected ? 'Clear All' : 'Select All',
           ),
         ],
       ),
@@ -91,67 +192,73 @@ class _SurahCalculatorPageState extends State<SurahCalculatorPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            // Summary Card
-            Container(
-              margin: EdgeInsets.all(16),
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
+        child: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: AppConstants.appBarColor,
+                ),
+              )
+            : Column(
                 children: [
-                  Text(
-                    'Ringkasan',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  // Summary Card
+                  Container(
+                    margin: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Ringkasan',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildSummaryItem('Juz', _totalJuz.toString()),
+                            _buildSummaryItem('Ayat', _totalAyat.toString()),
+                            _buildSummaryItem('Surah', _totalSurah.toString()),
+                            _buildSummaryItem('Halaman', _formatTotalPages(_totalPages)),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildSummaryItem('Juz', _totalJuz.toString()),
-                      _buildSummaryItem('Ayat', _totalAyat.toString()),
-                      _buildSummaryItem('Surah', _totalSurah.toString()),
-                      _buildSummaryItem('Halaman', _totalPages.toString()),
-                    ],
+                  // Surah List
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(8),
+                        itemCount: _surahList.length,
+                        itemBuilder: (context, index) {
+                          final surah = _surahList[index];
+                          return CheckboxListTile(
+                            title: Text(surah['name']),
+                            subtitle: Text(
+                              'Juz ${_getJuzDisplay(surah['juz'])} • ${surah['ayat']} ayat • ${_formatNumber(surah['pages'])} halaman',
+                            ),
+                            value: surah['checked'],
+                            onChanged: (value) => _toggleSurah(index),
+                            activeColor: AppConstants.appBarColor,
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            // Surah List
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ListView.builder(
-                  padding: EdgeInsets.all(8),
-                  itemCount: _surahList.length,
-                  itemBuilder: (context, index) {
-                    final surah = _surahList[index];
-                    return CheckboxListTile(
-                      title: Text(surah['name']),
-                      subtitle: Text(
-                        'Juz ${surah['juz']} • ${surah['ayat']} ayat • ${surah['pages']} halaman',
-                      ),
-                      value: surah['checked'],
-                      onChanged: (value) => _toggleSurah(index),
-                      activeColor: AppConstants.appBarColor,
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -178,4 +285,3 @@ class _SurahCalculatorPageState extends State<SurahCalculatorPage> {
     );
   }
 }
-

@@ -18,7 +18,11 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
   hadithModel.Hadith? _currentHadith;
   bool _isFavorite = false;
   bool _isPlaying = false;
+  bool _isLoadingAudio = false;
   AudioPlayer? _audioPlayer;
+  Duration _audioDuration = Duration.zero;
+  Duration _audioPosition = Duration.zero;
+  double _audioProgress = 0.0;
   double _fontSize = 16.0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late PageController _pageController;
@@ -31,6 +35,57 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
     super.initState();
     _loadFontSize();
     _loadAllHadiths();
+    _initializeAudioPlayer();
+  }
+
+  void _initializeAudioPlayer() {
+    _audioPlayer = AudioPlayer();
+    // Set player mode for better network audio handling
+    _audioPlayer!.setPlayerMode(PlayerMode.mediaPlayer);
+    
+    // Listen to player state changes
+    _audioPlayer!.onPlayerStateChanged.listen((PlayerState state) {
+      if (mounted) {
+        print('Audio player state changed: $state');
+        setState(() {
+          _isPlaying = state == PlayerState.playing;
+          if (state == PlayerState.playing) {
+            _isLoadingAudio = false;
+          } else if (state == PlayerState.completed) {
+            _audioProgress = 0.0;
+            _audioPosition = Duration.zero;
+            _audioDuration = Duration.zero;
+          }
+        });
+      }
+    });
+
+    // Listen for duration changes
+    _audioPlayer!.onDurationChanged.listen((Duration duration) {
+      if (mounted) {
+        setState(() {
+          _audioDuration = duration;
+        });
+      }
+    });
+
+    // Listen for position changes to update progress
+    _audioPlayer!.onPositionChanged.listen((Duration position) {
+      if (mounted && _audioDuration.inMilliseconds > 0) {
+        setState(() {
+          _audioPosition = position;
+          _audioProgress = position.inMilliseconds / _audioDuration.inMilliseconds;
+          // Clamp between 0 and 1
+          _audioProgress = _audioProgress.clamp(0.0, 1.0);
+          // print('Audio progress: ${(_audioProgress * 100).toStringAsFixed(1)}%');
+        });
+      }
+    });
+
+    // Listen for errors
+    _audioPlayer!.onLog.listen((message) {
+      print('Audio player log: $message');
+    });
   }
 
   @override
@@ -103,34 +158,138 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
     });
   }
 
-  Future<void> _toggleAudio() async {
-    if (_currentHadith?.audioPath == null) return;
-
+  Future<void> _playAudio() async {
     if (_audioPlayer == null) {
-      _audioPlayer = AudioPlayer();
+      _initializeAudioPlayer();
     }
 
-    if (_isPlaying) {
-      await _audioPlayer!.pause();
-      setState(() {
-        _isPlaying = false;
-      });
-    } else {
+    // Check current state
+    final currentState = _audioPlayer!.state;
+    
+    // If paused, resume
+    if (currentState == PlayerState.paused) {
       try {
-        await _audioPlayer!.play(AssetSource(_currentHadith!.audioPath!.replaceFirst('assets/', '')));
+        await _audioPlayer!.resume();
         setState(() {
           _isPlaying = true;
+          _isLoadingAudio = false;
         });
-        
-        _audioPlayer!.onPlayerComplete.listen((event) {
-          if (mounted) {
-            setState(() {
-              _isPlaying = false;
-            });
-          }
-        });
+        // Show resume snackbar
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Audio disambung semula'),
+              duration: Duration(seconds: 2),
+              backgroundColor: Colors.green[700],
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+        return;
       } catch (e) {
-        print('Error playing audio: $e');
+        print('Error resuming audio: $e');
+        // If resume fails, continue to play new audio
+      }
+    }
+    
+    // If already playing, restart from beginning
+    if (currentState == PlayerState.playing || _isPlaying) {
+      try {
+        await _audioPlayer!.stop();
+        // Small delay to ensure stop completes
+        await Future.delayed(Duration(milliseconds: 100));
+        // Continue to play new audio below
+      } catch (e) {
+        print('Error restarting audio: $e');
+      }
+    }
+
+    // If not paused and not playing, start new playback
+    setState(() {
+      _isLoadingAudio = true;
+      _isPlaying = false;
+    });
+
+    // Show snackbar for loading
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Audio sedang dimuat turun, akan dimainkan sebentar lagi...'),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.green[700],
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+
+    try {
+      final audioUrl = 'https://c24-s60348.github.io/Hadis40Revamp/Hadith${_currentHadithNumber}.mp3';
+      print('Attempting to play audio from: $audioUrl');
+      
+      // Set volume to ensure audio plays
+      await _audioPlayer!.setVolume(1.0);
+      
+      // Play the audio
+      await _audioPlayer!.play(UrlSource(audioUrl));
+      
+      print('Audio play command sent successfully');
+      
+      // Listen for completion (only set up once)
+      _audioPlayer!.onPlayerComplete.listen((event) {
+        if (mounted) {
+          print('Audio playback completed');
+          setState(() {
+            _isPlaying = false;
+            _audioProgress = 0.0;
+            _audioPosition = Duration.zero;
+            _audioDuration = Duration.zero;
+          });
+        }
+      });
+    } catch (e, stackTrace) {
+      print('Error playing audio: $e');
+      print('Stack trace: $stackTrace');
+      if (mounted) {
+        setState(() {
+          _isPlaying = false;
+          _isLoadingAudio = false;
+        });
+        // Show error snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ralat memuat audio. Sila cuba lagi.'),
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.red[700],
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _pauseAudio() async {
+    if (_audioPlayer != null) {
+      try {
+        final currentState = _audioPlayer!.state;
+        if (currentState == PlayerState.playing) {
+          await _audioPlayer!.pause();
+          setState(() {
+            _isPlaying = false;
+          });
+          // Show pause snackbar
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Audio diberhentikan sementara'),
+                duration: Duration(seconds: 2),
+                backgroundColor: Colors.orange[700],
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        }
+      } catch (e) {
+        print('Error pausing audio: $e');
       }
     }
   }
@@ -156,8 +315,14 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
   void _onPageChanged(int index) {
     final newHadithNumber = index + 1;
     if (newHadithNumber != _currentHadithNumber) {
+      // Stop audio when changing hadith
+      _audioPlayer?.stop();
       setState(() {
         _currentHadithNumber = newHadithNumber;
+        _isPlaying = false;
+        _audioProgress = 0.0;
+        _audioPosition = Duration.zero;
+        _audioDuration = Duration.zero;
       });
       _loadHadith();
     }
@@ -245,6 +410,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+                SizedBox(height: 10),
                 // Title
                 Text(
                   "- Hadis ${hadith.number} -",
@@ -282,28 +448,126 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
                 SizedBox(height: 10),
                 
                 // Audio Player Controls
-                if (hadith.audioPath != null)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.skip_previous, color: Colors.black, size: 30),
-                        onPressed: _previousHadith,
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          _isPlaying ? Icons.pause_circle : Icons.play_circle,
-                          color: Colors.black,
-                          size: 50,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Pause button (square, on the left)
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
                         ),
-                        onPressed: _toggleAudio,
+                        child: ElevatedButton(
+                          onPressed: _isPlaying ? _pauseAudio : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey[300],
+                            disabledBackgroundColor: Colors.grey[200],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            padding: EdgeInsets.zero,
+                            elevation: 0, // Remove default elevation since we're using custom shadow
+                          ),
+                          child: Icon(
+                            Icons.pause,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                        ),
                       ),
-                      IconButton(
-                        icon: Icon(Icons.skip_next, color: Colors.black, size: 30),
-                        onPressed: _nextHadith,
+                    ),
+                    SizedBox(width: 10),
+                    // Play button (rectangle, 2x wider, on the right) with progress indicator
+                    SizedBox(
+                      width: 120,
+                      height: 60,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            // Base button - must fill the SizedBox
+                            SizedBox(
+                              width: 120,
+                              height: 60,
+                              child: ElevatedButton(
+                                onPressed: _playAudio,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green[700],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size(120, 60),
+                                  elevation: 0, // Remove default elevation since we're using custom shadow
+                                ),
+                                child: SizedBox.shrink(), // Empty child, icon will be in separate layer
+                              ),
+                            ),
+                            // Progress overlay (darker color filling from left to right)
+                            if (_isPlaying)
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Stack(
+                                    children: [
+                                      // Progress fill from left - darker green overlay
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: FractionallySizedBox(
+                                          widthFactor: _audioProgress.clamp(0.0, 1.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                                colors: [
+                                                  const Color.fromARGB(255, 17, 60, 20).withOpacity(0.95),
+                                                  const Color.fromARGB(255, 17, 60, 20).withOpacity(0.85),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            // Play icon - always on top
+                            Center(
+                              child: Icon(
+                                Icons.play_arrow,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
                 
                 SizedBox(height: 20),
                 

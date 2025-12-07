@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:share_plus/share_plus.dart';
 
 class NavigationService {
   // Navigate to a specific route
@@ -72,11 +73,10 @@ class NavigationService {
 
   // Show share dialog
   static void showShareDialog(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Share functionality - to be implemented'),
-        duration: Duration(seconds: 2),
-      ),
+    const String playStoreUrl = 'https://play.google.com/store/apps/details?id=com.af1productions.hadis40&hl=ms';
+    Share.share(
+      playStoreUrl,
+      subject: 'Hadis 40 - Aplikasi Hadis 40 Imam Nawawi',
     );
   }
 

@@ -115,7 +115,7 @@ class SidebarMenu extends StatelessWidget {
                     _buildMenuItem(
                       context,
                       icon: Icons.help,
-                      title: 'Help (Update Log)',
+                      title: 'Informasi',
                       onTap: () {
                         NavigationService.closeDrawer(context);
                         NavigationService.goToInfo(context);

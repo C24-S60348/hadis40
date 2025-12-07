@@ -49,15 +49,15 @@ class InformationPage extends StatelessWidget {
                     Text(
                       'Aplikasi Hadis 40 ini dibangunkan untuk memudahkan umat Islam mempelajari dan menghafal koleksi hadis yang mulia ini. Dengan antara muka yang mudah dan kandungan yang lengkap, semoga aplikasi ini dapat membantu dalam perjalanan menuntut ilmu agama.\n\n'
                       'Ciri-ciri aplikasi:\n'
-                      '▪ 42 hadis pilihan Imam Nawawi lengkap\n'
-                      '▪ Teks hadis dengan terjemahan dan penjelasan\n'
-                      '▪ Audio bacaan hadis\n'
-                      '▪ Fungsi bookmark untuk hadis kegemaran\n'
-                      '▪ Saiz font boleh diubah mengikut kesesuaian\n'
-                      '▪ Kata-kata hikmah dari Al-Quran\n'
-                      '▪ Panduan solat sunat\n'
-                      '▪ Kalkulator surah\n'
-                      '▪ Boleh digunakan secara offline\n\n'
+                      '▪42 hadis pilihan Imam Nawawi lengkap\n'
+                      '▪Teks hadis dengan terjemahan dan penjelasan\n'
+                      '▪Audio bacaan hadis\n'
+                      '▪Fungsi bookmark untuk hadis kegemaran\n'
+                      '▪Saiz font boleh diubah mengikut kesesuaian\n'
+                      '▪Kata-kata hikmah dari Al-Quran\n'
+                      '▪Panduan solat sunat\n'
+                      '▪Kalkulator surah\n'
+                      '▪Boleh digunakan secara offline\n\n'
                       'Semoga dengan aplikasi ini, kita dapat lebih mendekatkan diri kepada sunnah Rasulullah ﷺ dan mengamalkan ajaran Islam dengan lebih baik.',
                       style: TextStyle(fontSize: 16, height: 1.6),
                       textAlign: TextAlign.justify,
