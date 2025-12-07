@@ -45,6 +45,8 @@ dependencies:
   audioplayers: ^6.0.0
   csv: ^6.0.0
   path_provider: ^2.1.2
+  sqflite: ^2.3.0
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +84,7 @@ flutter:
     - assets/images/
     - assets/audio/
     - assets/data/
+    - assets/data/surau_jumaat.db
     - assets/documents/
   #   - images/a_dot_ham.jpeg
 

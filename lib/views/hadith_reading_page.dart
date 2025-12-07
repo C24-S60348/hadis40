@@ -24,6 +24,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
   late PageController _pageController;
   bool _isInitialized = false;
   List<hadithModel.Hadith>? _allHadiths;
+  bool _isIncreasing = true; // Toggle direction for font size
 
   @override
   void initState() {
@@ -73,16 +74,15 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
     });
   }
 
-  void _incrementFontSize() {
+  void _toggleFontSize() {
     setState(() {
-      _fontSize = (_fontSize + 2).clamp(12.0, 32.0);
-    });
-    _saveFontSize();
-  }
-
-  void _decrementFontSize() {
-    setState(() {
-      _fontSize = (_fontSize - 2).clamp(12.0, 32.0);
+      if (_isIncreasing) {
+        _fontSize = (_fontSize + 2).clamp(12.0, 32.0);
+      } else {
+        _fontSize = (_fontSize - 2).clamp(12.0, 32.0);
+      }
+      // Toggle direction on each click
+      _isIncreasing = !_isIncreasing;
     });
     _saveFontSize();
   }
@@ -219,25 +219,11 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
           Positioned(
             right: 16,
             bottom: 16,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FloatingActionButton(
-                  mini: true,
-                  heroTag: "font_increment",
-                  onPressed: _incrementFontSize,
-                  child: Icon(Icons.add),
-                  backgroundColor: Colors.green,
-                ),
-                SizedBox(height: 10),
-                FloatingActionButton(
-                  mini: true,
-                  heroTag: "font_decrement",
-                  onPressed: _decrementFontSize,
-                  child: Icon(Icons.remove),
-                  backgroundColor: Colors.green,
-                ),
-              ],
+            child: FloatingActionButton(
+              heroTag: "font_toggle",
+              onPressed: _toggleFontSize,
+              child: Icon(_isIncreasing ? Icons.add : Icons.remove),
+              backgroundColor: Colors.green,
             ),
           ),
         ],
@@ -255,7 +241,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
         ),
       ),
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

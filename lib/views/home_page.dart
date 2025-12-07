@@ -80,10 +80,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               // Logo
               Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(5.0),
                 child: Image.asset(
                   'assets/images/logo.png',
-                  height: 240,
+                  height: 220,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
                     return Icon(Icons.mosque, size: 120, color: Colors.white);
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
 
                   // Hadith number display
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(
                         255,

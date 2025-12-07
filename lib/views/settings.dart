@@ -350,10 +350,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           Text('Kecil'),
                           Expanded(
                             child: Slider(
-                              value: _fontSize,
+                              value: _fontSize.clamp(12.0, 32.0),
                               min: 12.0,
-                              max: 24.0,
-                              divisions: 12,
+                              max: 32.0,
+                              divisions: 20,
                               onChanged: (value) {
                                 setState(() {
                                   _fontSize = value;
