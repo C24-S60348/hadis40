@@ -9,7 +9,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   String _selectedLanguage = 'Bahasa Melayu';
-  String _selectedBackgroundColor = 'Default';
+  String _selectedBackgroundColor = 'Putih';
   double _fontSize = 16.0;
   bool _isInitialized = false;
 

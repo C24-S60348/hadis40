@@ -55,12 +55,12 @@ class HadithService {
     
     List<String> quotes = [];
     
-    try {
+      try {
       // Load quotes from JSON file
       final String jsonString = await rootBundle.loadString('assets/data/katakatahikmah.json');
       final Map<String, dynamic> jsonData = json.decode(jsonString);
       quotes = List<String>.from(jsonData['kata-kata-hikmah'] ?? []);
-    } catch (e) {
+      } catch (e) {
       // Fallback to default quote if file loading fails
       quotes = ['Kata-kata hikmah akan muncul di sini'];
     }

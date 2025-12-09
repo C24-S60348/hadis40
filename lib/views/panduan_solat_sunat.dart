@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
+
 import '../utils/app_constants.dart';
 
 class PanduanSolatSunatPage extends StatefulWidget {
@@ -8,19 +13,37 @@ class PanduanSolatSunatPage extends StatefulWidget {
 
 class _PanduanSolatSunatPageState extends State<PanduanSolatSunatPage> {
   int _currentPage = 0;
-  
-  // Placeholder data - replace with actual solat sunat content
-  final List<Map<String, String>> _solatSunatList = [
-    {
-      'title': 'Solat Sunat Subuh',
-      'content': 'Panduan untuk solat sunat subuh akan dimasukkan di sini...',
-    },
-    {
-      'title': 'Solat Sunat Dhuha',
-      'content': 'Panduan untuk solat sunat dhuha akan dimasukkan di sini...',
-    },
-    // Add more solat sunat entries here
-  ];
+  bool _isLoading = true;
+  List<Map<String, String>> _solatSunatList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSolatSunat();
+  }
+
+  Future<void> _loadSolatSunat() async {
+    try {
+      final String jsonString = await rootBundle.loadString('assets/data/solatsunat.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      final List<dynamic> items = jsonData['solat_sunat'] ?? [];
+
+      setState(() {
+        _solatSunatList = items
+            .map((e) => {
+                  'title': e['name']?.toString() ?? '',
+                  'content': e['content']?.toString() ?? '',
+                })
+            .toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading solat sunat data: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   void _nextPage() {
     if (_currentPage < _solatSunatList.length - 1) {
@@ -60,87 +83,100 @@ class _PanduanSolatSunatPageState extends State<PanduanSolatSunatPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: _solatSunatList.isEmpty
+        child: _isLoading
             ? Center(
-                child: Text(
-                  'Tiada kandungan',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                child: CircularProgressIndicator(
+                  color: AppConstants.appBarColor,
                 ),
               )
-            : Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.all(16),
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(10),
+            : _solatSunatList.isEmpty
+                ? Center(
+                    child: Text(
+                      'Tiada kandungan',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  )
+                : Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.all(16),
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _solatSunatList[_currentPage]['title'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Html(
+                                  data: _solatSunatList[_currentPage]['content'] ?? '',
+                                  style: {
+                                    'body': Style(
+                                      fontSize: FontSize(16),
+                                      color: Colors.black87,
+                                    ),
+                                    'p': Style(
+                                      fontSize: FontSize(16),
+                                      color: Colors.black87,
+                                      margin: Margins.only(bottom: 12),
+                                    ),
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      // Navigation buttons
+                      Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              _solatSunatList[_currentPage]['title'] ?? '',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                            ElevatedButton.icon(
+                              onPressed: _currentPage > 0 ? _previousPage : null,
+                              icon: Icon(Icons.arrow_back),
+                              label: Text('Sebelum'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppConstants.appBarColor,
+                                foregroundColor: Colors.white,
                               ),
                             ),
-                            SizedBox(height: 20),
                             Text(
-                              _solatSunatList[_currentPage]['content'] ?? '',
+                              '${_currentPage + 1} / ${_solatSunatList.length}',
                               style: TextStyle(
+                                color: Colors.black,
                                 fontSize: 16,
-                                color: Colors.black87,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: _currentPage < _solatSunatList.length - 1
+                                  ? _nextPage
+                                  : null,
+                              icon: Icon(Icons.arrow_forward),
+                              label: Text('Seterusnya'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppConstants.appBarColor,
+                                foregroundColor: Colors.white,
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                  // Navigation buttons
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: _currentPage > 0 ? _previousPage : null,
-                          icon: Icon(Icons.arrow_back),
-                          label: Text('Sebelum'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppConstants.appBarColor,
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          '${_currentPage + 1} / ${_solatSunatList.length}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: _currentPage < _solatSunatList.length - 1
-                              ? _nextPage
-                              : null,
-                          icon: Icon(Icons.arrow_forward),
-                          label: Text('Seterusnya'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppConstants.appBarColor,
-                            foregroundColor: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
       ),
     );
   }
