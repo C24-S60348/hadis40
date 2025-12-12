@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../utils/app_constants.dart';
+import '../services/kata_kata_hikmah_loader.dart';
+import '../models/kata_kata_hikmah.dart';
 
 class KataKataHikmahPage extends StatefulWidget {
   @override
@@ -8,7 +10,7 @@ class KataKataHikmahPage extends StatefulWidget {
 
 class _KataKataHikmahPageState extends State<KataKataHikmahPage> {
   int _currentIndex = 0;
-  List<String> _quotes = [];
+  List<KataKataHikmah> _quotes = [];
   bool _isLoading = true;
 
   @override
@@ -18,16 +20,18 @@ class _KataKataHikmahPageState extends State<KataKataHikmahPage> {
   }
 
   Future<void> _loadQuotes() async {
-    // Load quotes from service or use default
-    // For now, using placeholder - you'll provide actual quotes later
-    setState(() {
-      _quotes = [
-        'Kata-kata hikmah 1 - Sila masukkan kandungan di sini',
-        'Kata-kata hikmah 2 - Sila masukkan kandungan di sini',
-        'Kata-kata hikmah 3 - Sila masukkan kandungan di sini',
-      ];
-      _isLoading = false;
-    });
+    try {
+      final quotes = await KataKataHikmahLoader.loadQuotes();
+      setState(() {
+        _quotes = quotes;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading quotes: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   void _nextQuote() {
@@ -74,7 +78,7 @@ class _KataKataHikmahPageState extends State<KataKataHikmahPage> {
                 ? Center(
                     child: Text(
                       'Tiada kata-kata hikmah',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(color: Colors.black, fontSize: 18),
                     ),
                   )
                 : Column(
@@ -88,14 +92,37 @@ class _KataKataHikmahPageState extends State<KataKataHikmahPage> {
                               color: Colors.white.withOpacity(0.9),
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Text(
-                              _quotes[_currentIndex],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.black87,
-                              ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _quotes[_currentIndex].kutipan,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.black87,
+                                    height: 1.6,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  decoration: BoxDecoration(
+                                    color: AppConstants.appBarColor.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    _quotes[_currentIndex].sumber,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppConstants.appBarColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -118,7 +145,7 @@ class _KataKataHikmahPageState extends State<KataKataHikmahPage> {
                             Text(
                               '${_currentIndex + 1} / ${_quotes.length}',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
