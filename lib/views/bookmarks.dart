@@ -161,6 +161,33 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
+                                    // Hadith Image
+                                    if (hadith.imagePath.isNotEmpty)
+                                      Container(
+                                        width: 80,
+                                        height: 80,
+                                        margin: EdgeInsets.only(right: 12),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: Image.asset(
+                                            hadith.imagePath,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return Container(
+                                                color: Colors.grey[200],
+                                                child: Icon(
+                                                  Icons.image_not_supported,
+                                                  color: Colors.grey[400],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,6 +207,8 @@ class _BookmarksPageState extends State<BookmarksPage> {
                                               fontSize: 14,
                                               color: Colors.grey[600],
                                             ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
                                       ),
