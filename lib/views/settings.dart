@@ -261,62 +261,62 @@ class _SettingsPageState extends State<SettingsPage> {
                 // SizedBox(height: 16),
 
                 // Background Color Selection
-                Container(
-                  padding: EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Pilih warna latar belakang',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      InkWell(
-                        onTap: _showBackgroundColorDialog,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                      color: _backgroundColorOptions.firstWhere(
-                                        (opt) => opt['name'] == _selectedBackgroundColor,
-                                        orElse: () => _backgroundColorOptions[0],
-                                      )['color'] as Color,
-                                      border: Border.all(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(_selectedBackgroundColor),
-                                ],
-                              ),
-                              Icon(Icons.arrow_drop_down),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
+                // Container(
+                //   padding: EdgeInsets.all(16.0),
+                //   decoration: BoxDecoration(
+                //     color: Colors.white.withOpacity(0.9),
+                //     borderRadius: BorderRadius.circular(10),
+                //   ),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         'Pilih warna latar belakang',
+                //         style: TextStyle(
+                //           fontSize: 18,
+                //           fontWeight: FontWeight.bold,
+                //           color: Colors.black,
+                //         ),
+                //       ),
+                //       SizedBox(height: 10),
+                //       InkWell(
+                //         onTap: _showBackgroundColorDialog,
+                //         child: Container(
+                //           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                //           decoration: BoxDecoration(
+                //             border: Border.all(color: Colors.grey),
+                //             borderRadius: BorderRadius.circular(8),
+                //           ),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //             children: [
+                //               Row(
+                //                 children: [
+                //                   Container(
+                //                     width: 20,
+                //                     height: 20,
+                //                     decoration: BoxDecoration(
+                //                       color: _backgroundColorOptions.firstWhere(
+                //                         (opt) => opt['name'] == _selectedBackgroundColor,
+                //                         orElse: () => _backgroundColorOptions[0],
+                //                       )['color'] as Color,
+                //                       border: Border.all(color: Colors.grey),
+                //                       borderRadius: BorderRadius.circular(3),
+                //                     ),
+                //                   ),
+                //                   SizedBox(width: 10),
+                //                   Text(_selectedBackgroundColor),
+                //                 ],
+                //               ),
+                //               Icon(Icons.arrow_drop_down),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(height: 16),
 
                 // Font Size
                 Container(
@@ -324,6 +324,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,10 +420,12 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 // App Info
                 Container(
+                  // width: double.infinity,
                   padding: EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -442,7 +445,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'App Version: 1.0.0',
+                        'App Version: 3.0.15',
                         style: TextStyle(fontSize: 14, color: Colors.black87),
                       ),
                     ],
