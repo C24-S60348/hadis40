@@ -413,7 +413,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
                 SizedBox(height: 10),
                 // Title
                 Text(
-                  "- Hadis ${hadith.number} -",
+                  "Hadis ${hadith.number}",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
