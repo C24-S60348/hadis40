@@ -445,7 +445,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'App Version: 3.0.15',
+                        'App Version: 3.0.16',
                         style: TextStyle(fontSize: 14, color: Colors.black87),
                       ),
                     ],
