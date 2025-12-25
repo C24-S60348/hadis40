@@ -11,6 +11,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String _selectedLanguage = 'Bahasa Melayu';
   String _selectedBackgroundColor = 'Putih';
   double _fontSize = 16.0;
+  String _textAlignment = 'Justify'; // 'Left', 'Center', 'Justify'
   bool _isInitialized = false;
 
   final List<String> _languageOptions = [
@@ -39,6 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
       _selectedLanguage = prefs.getString('selected_language') ?? 'Bahasa Melayu';
       _selectedBackgroundColor = prefs.getString('selected_background_color') ?? 'Default';
       _fontSize = prefs.getDouble('font_size') ?? 16.0;
+      _textAlignment = prefs.getString('text_alignment') ?? 'Justify';
       _isInitialized = true;
     });
   }
@@ -48,6 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
     await prefs.setString('selected_language', _selectedLanguage);
     await prefs.setString('selected_background_color', _selectedBackgroundColor);
     await prefs.setDouble('font_size', _fontSize);
+    await prefs.setString('text_alignment', _textAlignment);
   }
 
   void _showLanguageDialog() {
@@ -178,6 +181,45 @@ class _SettingsPageState extends State<SettingsPage> {
       _fontSize = 16.0;
     });
     _saveSettings();
+  }
+
+  Widget _buildAlignmentButton(String label, String value, IconData icon) {
+    final isSelected = _textAlignment == value;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _textAlignment = value;
+        });
+        _saveSettings();
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? AppConstants.appBarColor : Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? AppConstants.appBarColor : Colors.grey,
+            width: 2,
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? Colors.white : Colors.black,
+            ),
+            SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.black,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -415,7 +457,40 @@ class _SettingsPageState extends State<SettingsPage> {
                 //       ),
                 //     ],
                 //   ),
-                // ),
+                //                 ),
+                SizedBox(height: 16),
+
+                // Text Alignment Selection
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Penjajaran Teks',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildAlignmentButton('Kiri', 'Left', Icons.format_align_left),
+                          _buildAlignmentButton('Tengah', 'Center', Icons.format_align_center),
+                          _buildAlignmentButton('Justify', 'Justify', Icons.format_align_justify),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 16),
 
                 // App Info

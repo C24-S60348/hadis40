@@ -24,6 +24,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
   Duration _audioPosition = Duration.zero;
   double _audioProgress = 0.0;
   double _fontSize = 16.0;
+  String _textAlignment = 'Justify'; // 'Left', 'Center', 'Justify'
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late PageController _pageController;
   bool _isInitialized = false;
@@ -116,6 +117,7 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _fontSize = prefs.getDouble('font_size') ?? 16.0;
+      _textAlignment = prefs.getString('text_alignment') ?? 'Justify';
     });
   }
 
@@ -611,11 +613,21 @@ class _HadithReadingPageState extends State<HadithReadingPage> {
                       "body": Style(
                         fontSize: FontSize(_fontSize),
                         color: Colors.black,
+                        textAlign: _textAlignment == 'Left' 
+                            ? TextAlign.left 
+                            : _textAlignment == 'Center'
+                                ? TextAlign.center
+                                : TextAlign.justify,
                       ),
                       "p": Style(
                         fontSize: FontSize(_fontSize),
                         margin: Margins.zero,
                         padding: HtmlPaddings.only(bottom: 10),
+                        textAlign: _textAlignment == 'Left' 
+                            ? TextAlign.left 
+                            : _textAlignment == 'Center'
+                                ? TextAlign.center
+                                : TextAlign.justify,
                       ),
                     },
                   ),
