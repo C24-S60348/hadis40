@@ -1,11 +1,11 @@
 {
-    "name": "Celik Tafsir",
-    "short_name": "Celik Tafsir",
+    "name": "Hadis 40 Imam Nawawi",
+    "short_name": "Hadis 40",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "Celik Tafsir",
+    "background_color": "#4CAF50",
+    "theme_color": "#4CAF50",
+    "description": "Aplikasi pembelajaran 40 Hadis Imam Nawawi",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
