@@ -35,71 +35,78 @@ class _MainPageState extends State<MainPage> {
       // ),
       body: Container(
         color: Colors.black,
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // Image.asset(
-            //   'assets/images/bg.jpg',
-            //   fit: BoxFit.cover,
-            //   width: double.infinity,
-            //   height: double.infinity,
-            // ),
-            Image.asset(
-              'assets/images/Kandungan.png', 
-              fit: BoxFit.contain,
-              alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
             ),
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: 65),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        style: buttonstyle,
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/tadabbur');
-                        },
-                        child: SizedBox(),
-                      ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        style: buttonstyle,
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/bookmarks');
-                        },
-                        child: SizedBox(),
-                      ),
-                    ],
+            child: Stack(
+              children: [
+                // Image.asset(
+                //   'assets/images/bg.jpg',
+                //   fit: BoxFit.cover,
+                //   width: double.infinity,
+                //   height: double.infinity,
+                // ),
+                Image.asset(
+                  'assets/images/Kandungan.png', 
+                  fit: BoxFit.contain,
+                  alignment: Alignment.center,
+                ),
+                Positioned.fill(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: 65),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              style: buttonstyle,
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/tadabbur');
+                              },
+                              child: SizedBox(),
+                            ),
+                            SizedBox(width: 10),
+                            ElevatedButton(
+                              style: buttonstyle,
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/bookmarks');
+                              },
+                              child: SizedBox(),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              style: buttonstyle,
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/settings');
+                              },
+                              child: SizedBox(),
+                            ),
+                            SizedBox(width: 10),
+                            ElevatedButton(
+                              style: buttonstyle,
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/info');
+                              },
+                              child: SizedBox(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        style: buttonstyle,
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/settings');
-                        },
-                        child: SizedBox(),
-                      ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        style: buttonstyle,
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/info');
-                        },
-                        child: SizedBox(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
