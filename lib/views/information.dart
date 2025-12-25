@@ -1,8 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../utils/app_constants.dart';
 
-class InformationPage extends StatelessWidget {
+class InformationPage extends StatefulWidget {
+  @override
+  _InformationPageState createState() => _InformationPageState();
+}
+
+class _InformationPageState extends State<InformationPage> {
+  String _version = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _version = packageInfo.version;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +87,7 @@ class InformationPage extends StatelessWidget {
                     Divider(color: Colors.black),
                     SizedBox(height: 10),
                     Text(
-                      'Versi: 3.0.16',
+                      'Versi: $_version',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 10),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../utils/app_constants.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -13,6 +14,7 @@ class _SettingsPageState extends State<SettingsPage> {
   double _fontSize = 16.0;
   String _textAlignment = 'Justify'; // 'Left', 'Center', 'Justify'
   bool _isInitialized = false;
+  String _version = 'Loading...';
 
   final List<String> _languageOptions = [
     'Bahasa Melayu',
@@ -32,6 +34,14 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _loadSettings();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _version = packageInfo.version;
+    });
   }
 
   Future<void> _loadSettings() async {
@@ -520,7 +530,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'App Version: 3.0.16',
+                        'App Version: $_version',
                         style: TextStyle(fontSize: 14, color: Colors.black87),
                       ),
                     ],

@@ -125,11 +125,13 @@ class _PanduanSolatSunatPageState extends State<PanduanSolatSunatPage> {
                                     'body': Style(
                                       fontSize: FontSize(16),
                                       color: Colors.black87,
+                                      textAlign: TextAlign.justify,
                                     ),
                                     'p': Style(
                                       fontSize: FontSize(16),
                                       color: Colors.black87,
                                       margin: Margins.only(bottom: 12),
+                                      textAlign: TextAlign.justify,
                                     ),
                                   },
                                 ),
